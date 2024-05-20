@@ -1,0 +1,57 @@
+name: pearl
+
+networks:
+  pearl:
+    driver: bridge
+
+services:
+  database:
+    image: postgres:16.3
+    networks:
+      - pearl
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: pearljam
+      POSTGRES_PASSWORD: pearljam
+    volumes:
+      - ./dbvol:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "pearljam"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 3s
+
+  # Admin UI for the database
+  adminer:
+    image: adminer
+    networks:
+      - pearl
+    restart: always
+    ports:
+      - 8080:8080
+
+  # RabbitMQ
+  rabbit-mq:
+    image: rabbitmq:3.13.2-management
+    restart: always
+    networks:
+      - pearl
+    environment:
+      - RABBITMQ_DEFAULT_USER=pearljam
+      - RABBITMQ_DEFAULT_PASS=pearljam
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  # OTEL Collector
+  otel-collector:
+    image: otel/opentelemetry-collector:0.100.0
+    ports:
+      - 4318:4318
+
+volumes:
+  dbvol:
