@@ -10,6 +10,14 @@ config :pearl, Pearl.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :pearl, Pearl.PromEx,
+  grafana: [
+    host: "http://localhost:3000",
+    username: "admin",
+    password: "admin",
+    upload_dashboards_on_start: true
+  ]
+
 # Configure opentelemetry
 # See https://opentelemetry.io/docs/languages/erlang/getting-started/
 config :opentelemetry, traces_exporter: {:otel_exporter_stdout, []}

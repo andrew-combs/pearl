@@ -11,6 +11,13 @@ config :pearl,
   ecto_repos: [Pearl.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :pearl, Pearl.PromEx,
+  disabled: false,
+  manual_metrics_start_delay: :no_delay,
+  drop_metrics_groups: [],
+  grafana: :disabled,
+  metrics_server: :disabled
+
 # Configures the endpoint
 config :pearl, PearlWeb.Endpoint,
   url: [host: "localhost"],

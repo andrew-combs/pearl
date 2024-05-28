@@ -40,18 +40,36 @@ services:
     restart: always
     networks:
       - pearl
+    volumes:
+      - ./rabbitmq:/var/hostfiles
     environment:
-      - RABBITMQ_DEFAULT_USER=pearljam
-      - RABBITMQ_DEFAULT_PASS=pearljam
+      - RABBITMQ_ENABLED_PLUGINS_FILE=/var/hostfiles/plugins_config
     ports:
       - 5672:5672
       - 15672:15672
+      - 15692:15692
 
-  # OTEL Collector
-  otel-collector:
-    image: otel/opentelemetry-collector:0.100.0
+  # Prometheus
+  prometheus:
+    image: prom/prometheus
+    restart: always
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - pearl
     ports:
-      - 4318:4318
+      - 9090:9090
+
+  # Grafana
+  grafana:
+    image: grafana/grafana
+    restart: always
+    networks:
+      - pearl
+    ports:
+      - 3000:3000
 
 volumes:
   dbvol:
+  rabbitmq:
+  prometheus:

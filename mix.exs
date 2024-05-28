@@ -29,7 +29,7 @@ defmodule Pearl.MixProject do
         declare_rabbit_queues: [
           endpoint: "localhost",
           queues: [
-            "combs_test"
+            "sample_queue"
           ]
         ]
       ]
@@ -52,7 +52,8 @@ defmodule Pearl.MixProject do
       {:phoenix_html, "~> 4.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.2"},
-      {:floki, ">= 0.30.0", only: :test},
+      {:req, "~> 0.4.0"},
+      {:floki, ">= 0.30.0"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
@@ -76,7 +77,9 @@ defmodule Pearl.MixProject do
       {:opentelemetry_exporter, "~> 1.6"},
       {:opentelemetry_phoenix, "~> 1.1"},
       {:opentelemetry_cowboy, "~> 0.2"},
-      {:amqp, "~> 3.3"}
+      {:amqp, "~> 3.3"},
+      {:broadway_rabbitmq, "~> 0.7"},
+      {:prom_ex, "~> 1.9.0"}
     ]
   end
 

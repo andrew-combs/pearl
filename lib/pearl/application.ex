@@ -22,7 +22,9 @@ defmodule Pearl.Application do
       # Start a worker by calling: Pearl.Worker.start_link(arg)
       # {Pearl.Worker, arg},
       # Start to serve requests, typically the last entry
-      PearlWeb.Endpoint
+      PearlWeb.Endpoint,
+      {Pearl.Processor, []},
+      Pearl.PromEx
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -36,16 +38,12 @@ defmodule Pearl.Application do
     Tracer.with_span "application.start_phase.declare_rabbit_queues" do
       endpoint = Keyword.get(config, :endpoint, "localhost")
       port = Keyword.get(config, :port, 5672)
-      username = Keyword.get(config, :username, "pearljam")
-      password = Keyword.get(config, :password, "pearljam")
       queues = Keyword.fetch!(config, :queues)
 
       {:ok, connection} =
         AMQP.Connection.open(
           endpoint: endpoint,
-          port: port,
-          username: username,
-          password: password
+          port: port
         )
 
       {:ok, channel} = AMQP.Channel.open(connection)
